@@ -4,7 +4,7 @@ import com.autoservice.mobile.domain.model.ServiceRequest
 import com.google.gson.annotations.SerializedName
 
 data class ServiceRequestDto(
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Int?,
     @SerializedName("car_id") val carId: Int,
     @SerializedName("description") val description: String,
     @SerializedName("status") val status: String,

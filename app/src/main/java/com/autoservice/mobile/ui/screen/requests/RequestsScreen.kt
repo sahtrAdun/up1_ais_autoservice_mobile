@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,7 +68,11 @@ fun RequestsScreen(
                     Text(text = "У вас пока нет заявок")
                 }
                 else -> {
-                    state.requests.forEach { request ->
+                    val sorted = remember(state.requests) {
+                        state.requests.sortedByDescending { it.id }
+                    }
+
+                    sorted.forEach { request ->
                         RequestItem(request = request)
                         Spacer(modifier = Modifier.height(8.dp))
                     }

@@ -61,11 +61,10 @@ class NewRequestsViewModel(
         )
         val result = createServiceRequestUseCase.invoke(request)
 
-        if (result.isSuccess) {
-            update { it.copy(isSuccess = true) }
-        } else {
-            update { it.copy(error = "Не удалось создать заявку") }
-        }
+        result.fold(
+            onSuccess = { update { it.copy(isSuccess = true) } },
+            onFailure = { err -> update { it.copy(error = err.message) } }
+        )
     }
 
     fun selectCar(car: Car) {
@@ -76,6 +75,13 @@ class NewRequestsViewModel(
         update { it.copy(
             isSuccess = false,
             selectedCarId = null,
+            error = null
+        ) }
+    }
+
+    fun clearError() {
+        update { it.copy(
+            isSuccess = false,
             error = null
         ) }
     }

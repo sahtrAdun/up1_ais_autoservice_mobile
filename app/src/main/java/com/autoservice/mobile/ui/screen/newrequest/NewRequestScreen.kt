@@ -23,6 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TopAppBar
@@ -49,6 +51,7 @@ fun NewRequestScreen(
     viewModel: NewRequestsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
     var description by remember { mutableStateOf("") }
     var descriptionError by remember { mutableStateOf<String?>(null) }
     var carError by remember { mutableStateOf<String?>(null) }
@@ -60,7 +63,15 @@ fun NewRequestScreen(
         }
     }
 
+    LaunchedEffect(uiState.error) {
+        if (uiState.error != null) {
+            snackbarHostState.showSnackbar(uiState.error!!)
+            viewModel.clearError()
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("Новое заявление") },
@@ -81,9 +92,6 @@ fun NewRequestScreen(
         ) {
             when {
                 uiState.isLoading -> CircularProgressIndicator()
-                uiState.error != null -> {
-                    Text(text = uiState.error!!, color = MaterialTheme.colorScheme.error)
-                }
                 uiState.cars.isEmpty() -> {
                     Text("У вас нет автомобилей")
                 }

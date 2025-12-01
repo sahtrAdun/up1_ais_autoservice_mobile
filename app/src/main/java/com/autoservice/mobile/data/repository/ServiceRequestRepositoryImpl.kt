@@ -45,7 +45,7 @@ class ServiceRequestRepositoryImpl(
     override suspend fun createRequest(request: ServiceRequest): Result<Boolean> {
         return try {
             val requestDto = com.autoservice.mobile.data.remote.dto.ServiceRequestDto(
-                id = 0,
+                id = null,
                 carId = request.carId,
                 description = request.description,
                 status = request.status,

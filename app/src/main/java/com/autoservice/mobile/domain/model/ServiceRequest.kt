@@ -1,7 +1,7 @@
 package com.autoservice.mobile.domain.model
 
 data class ServiceRequest(
-    val id: Int,
+    val id: Int?,
     val carId: Int,
     val description: String,
     val status: String,
